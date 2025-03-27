@@ -75,6 +75,26 @@ cp .env.example .env
 ```
 Editar el archivo `.env` con tus credenciales de base de datos y configuración.
 
+```env
+# Configuración general
+PORT=3000
+NODE_ENV=development
+
+# JWT
+JWT_SECRET=tu_secreto_jwt_aqui
+JWT_EXPIRATION=24h
+
+# PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=tu_contraseña
+DB_DATABASE=nestcrm
+
+# MongoDB
+MONGO_URI=mongodb://localhost:27017/nestcrm
+```
+
 4. Iniciar el servidor:
 ```bash
 npm run start:dev
@@ -175,4 +195,109 @@ src/
 - `npm run start` - Iniciar en modo producción
 - `npm run start:dev` - Iniciar en modo desarrollo
 - `npm run build` - Compilar el proyecto
+
+## Pruebas de la API
+
+### 1. Registro de Usuario
+```bash
+curl -X POST http://localhost:3000/auth/register \
+-H "Content-Type: application/json" \
+-d '{
+  "nombre": "Juan Pérez",
+  "email": "juan@ejemplo.com",
+  "password": "Contraseña123!",
+  "companyId": 1
+}'
+```
+
+### 2. Inicio de Sesión
+```bash
+curl -X POST http://localhost:3000/auth/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "juan@ejemplo.com",
+  "password": "Contraseña123!"
+}'
+```
+
+### 3. Crear Compañía
+```bash
+curl -X POST http://localhost:3000/companias \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer TU_TOKEN_JWT" \
+-d '{
+  "nombre": "Empresa Ejemplo S.A.S",
+  "direccion": "Carrera 89 #45-67",
+  "ciudadId": 1,
+  "departamentoId": 1
+}'
+```
+
+### 4. Agregar Información Adicional a Compañía
+```bash
+curl -X POST http://localhost:3000/companias/1/info \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer TU_TOKEN_JWT" \
+-d '{
+  "companiaId": 1,
+  "logoUrl": "https://ejemplo.com/logo.png",
+  "telefono": "6011234567",
+  "direccion": "Carrera 89 #45-67",
+  "actividadEconomica": "Desarrollo de Software",
+  "codigoActividadEconomica": "6201"
+}'
+```
+
+### 5. Crear Producto
+```bash
+curl -X POST http://localhost:3000/productos \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer TU_TOKEN_JWT" \
+-d '{
+  "nombre": "Software CRM Premium",
+  "descripcion": "Sistema de gestión de relaciones con clientes",
+  "precio": 199.99,
+  "companyId": 1
+}'
+```
+
+### 6. Agregar Información Adicional a Producto
+```bash
+curl -X POST http://localhost:3000/productos/1/info \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer TU_TOKEN_JWT" \
+-d '{
+  "productoId": 1,
+  "imagenesUrls": [
+    "https://ejemplo.com/producto1.jpg",
+    "https://ejemplo.com/producto2.jpg"
+  ],
+  "cantidad": 100,
+  "categoria": "Software",
+  "subCategoria": "CRM"
+}'
+```
+
+### 7. Agregar Información Adicional a Usuario
+```bash
+curl -X POST http://localhost:3000/usuarios/1/info \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer TU_TOKEN_JWT" \
+-d '{
+  "userId": 1,
+  "imagenPerfil": "https://ejemplo.com/perfil.jpg",
+  "telefono": "3001234567",
+  "direccion": "Calle 123 #45-67",
+  "nombreUsuario": "juanperez",
+  "cargo": "Gerente de Ventas",
+  "salario": 5000000,
+  "impuestosAnuales": 600000
+}'
+```
+
+### Notas Importantes:
+- Reemplaza `TU_TOKEN_JWT` con el token recibido en el login
+- Los IDs (como `companyId`, `ciudadId`, `departamentoId`, etc.) deben ser ajustados según los datos existentes
+- Asegúrate de que el servidor esté corriendo en `localhost:3000`
+- Todos los campos marcados como opcionales en los DTOs pueden ser omitidos en las peticiones
 
