@@ -90,6 +90,7 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=tu_contraseña
 DB_DATABASE=nestcrm
+DB_SCHEMA=nest-crm
 
 # MongoDB
 MONGO_URI=mongodb://localhost:27017/nestcrm
@@ -158,7 +159,7 @@ src/
 
 ### Autenticación
 - `POST /auth/login` - Inicio de sesión
-- `POST /auth/register` - Registro de usuario
+- `POST /auth/signup` - Registro de usuario
 
 ### Usuarios
 - `GET /usuarios` - Listar usuarios
@@ -200,7 +201,7 @@ src/
 
 ### 1. Registro de Usuario
 ```bash
-curl -X POST http://localhost:3000/auth/register \
+curl -X POST http://localhost:3000/auth/signup \
 -H "Content-Type: application/json" \
 -d '{
   "nombre": "Juan Pérez",
